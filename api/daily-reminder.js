@@ -1,56 +1,71 @@
 export default async function handler(req, res) {
-  // 验证是 Vercel Cron 调用（安全校验）
   if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
   try {
-    // 1. 从 Supabase 查询「计划中」的 AMA
     const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
     const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 
     const response = await fetch(
       `${supabaseUrl}/rest/v1/ama_records?status=eq.计划中&order=date.asc`,
-      {
-        headers: {
-          apikey: supabaseKey,
-          Authorization: `Bearer ${supabaseKey}`,
-        },
-      }
+      { headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` } }
     );
-
     const records = await response.json();
+
+    const today = new Date();
+    const todayStr = today.toISOString().slice(0, 10);
+
+    // 本周范围（周一到周日）
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - today.getDay() + 1);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+    const weekStartStr = weekStart.toISOString().slice(0, 10);
+    const weekEndStr = weekEnd.toISOString().slice(0, 10);
+
+    const thisWeek = records.filter(r => r.date >= weekStartStr && r.date <= weekEndStr);
+    const upcoming = records.filter(r => r.date > weekEndStr).slice(0, 5);
 
     if (!records.length) {
       return res.status(200).json({ message: '没有待办 AMA' });
     }
 
-    // 2. 组装 Telegram 消息
-    const today = new Date().toISOString().slice(0, 10);
-    const lines = records.map(r => {
-      const daysLeft = Math.ceil(
-        (new Date(r.date) - new Date(today)) / (1000 * 60 * 60 * 24)
-      );
-      const urgency = daysLeft <= 3 ? '🔴' : daysLeft <= 7 ? '🟡' : '🟢';
-      return `${urgency} *${r.project_name}*${r.episode ? ` 第${r.episode}期` : ''}\n📅 ${r.date}（${daysLeft > 0 ? `${daysLeft}天后` : daysLeft === 0 ? '今天！' : `已过期${Math.abs(daysLeft)}天`}）\n主题：${r.theme || '待定'}`;
-    });
+    const fmt = (r) => {
+      const daysLeft = Math.ceil((new Date(r.date) - today) / 86400000);
+      const dot = daysLeft <= 3 ? '🔴' : daysLeft <= 7 ? '🟡' : '🟢';
+      const time = r.time ? ` ${r.time}` : '';
+      const owner = r.owner ? `\n👤 ${r.owner}` : '';
+      const platform = r.platform ? ` · ${r.platform}` : '';
+      return `${dot} *${r.project_name}*${r.episode ? ` #${r.episode}` : ''}${platform}\n📅 ${r.date}${time}${owner}\n💬 ${r.theme || '主题待定'}`;
+    };
 
-    const message = `📋 *AMA 待办提醒*\n大树财经 · ${today}\n\n${lines.join('\n\n')}\n\n👉 [查看档案库](https://ama-hub.vercel.app)`;
+    let message = `📋 *大树财经 AMA 周计划*\n${weekStartStr} ～ ${weekEndStr}\n`;
 
-    // 3. 推送到 Telegram
-    const botToken = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
+    if (thisWeek.length) {
+      message += `\n*本周计划（${thisWeek.length}场）*\n\n`;
+      message += thisWeek.map(fmt).join('\n\n');
+    } else {
+      message += `\n本周暂无计划 AMA ✨`;
+    }
+
+    if (upcoming.length) {
+      message += `\n\n*后续安排*\n`;
+      message += upcoming.map(r => `▸ ${r.date} ${r.project_name}${r.episode ? ` #${r.episode}` : ''} — ${r.theme || '主题待定'}`).join('\n');
+    }
+
+    message += `\n\n👉 [查看 AMA 档案库](https://ama-hub.vercel.app)`;
 
     const tgRes = await fetch(
-      `https://api.telegram.org/bot${botToken}/sendMessage`,
+      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          chat_id: chatId,
+          chat_id: process.env.TELEGRAM_CHAT_ID,
           text: message,
           parse_mode: 'Markdown',
-          disable_web_page_preview: false,
+          disable_web_page_preview: true,
         }),
       }
     );
@@ -58,7 +73,7 @@ export default async function handler(req, res) {
     const tgData = await tgRes.json();
     if (!tgData.ok) throw new Error(tgData.description);
 
-    return res.status(200).json({ success: true, sent: records.length });
+    return res.status(200).json({ success: true, thisWeek: thisWeek.length, upcoming: upcoming.length });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
