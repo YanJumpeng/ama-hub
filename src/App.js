@@ -4,8 +4,8 @@ import { generatePromo, analyzeHistory, generateSummary } from './lib/ai';
 
 const STATUS = ['计划中', '进行中', '已完成'];
 const STATUS_STYLE = {
-  '计划中': { bg: '#0d2218', text: '#34d399', border: '#059669' },
-  '进行中': { bg: '#0f2d1e', text: '#34d399', border: '#059669' },
+  '计划中': { bg: '#f0fdf4', text: '#34d399', border: '#059669' },
+  '进行中': { bg: '#dcfce7', text: '#34d399', border: '#059669' },
   '已完成': { bg: '#2d1f00', text: '#fbbf24', border: '#d97706' },
 };
 const PLATFORMS = ['Telegram', 'Twitter Space', 'Discord', 'YouTube Live', 'Zoom', '其他'];
@@ -121,24 +121,24 @@ export default function App() {
   const platformDist = getPlatformDist(records);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#050f0a', color: '#e2e8f0', fontFamily: "'PingFang SC','Noto Sans SC',sans-serif", fontSize: 15 }}>
+    <div style={{ minHeight: '100vh', background: '#f0faf5', color: '#1f2937', fontFamily: "'PingFang SC','Noto Sans SC',sans-serif", fontSize: 15 }}>
       {toast && (
-        <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 9999, padding: '10px 20px', borderRadius: 8, background: toast.type === 'err' ? '#450a0a' : '#052e16', border: `1px solid ${toast.type === 'err' ? '#dc2626' : '#059669'}`, color: '#fff', fontSize: 14, boxShadow: '0 4px 20px rgba(0,0,0,0.6)' }}>{toast.msg}</div>
+        <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 9999, padding: '10px 20px', borderRadius: 8, background: toast.type === 'err' ? '#fef2f2' : '#f0fdf4', border: `1px solid ${toast.type === 'err' ? '#dc2626' : '#059669'}`, color: toast.type === 'err' ? '#dc2626' : '#065f46', fontSize: 14, boxShadow: '0 4px 20px rgba(0,0,0,0.6)' }}>{toast.msg}</div>
       )}
 
-      <div style={{ background: 'linear-gradient(180deg,#071a10 0%,#050f0a 100%)', borderBottom: '1px solid #134d2a', borderTop: '3px solid #059669', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 4px 24px rgba(5,150,105,0.12)' }}>
+      <div style={{ background: 'linear-gradient(180deg,#ffffff 0%,#f9fffe 100%)', borderBottom: '1px solid #bbf7d0', borderTop: '3px solid #059669', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 2px 16px rgba(5,150,105,0.10)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <img src="/logo.png" alt="Tree Finance" style={{ height: 36, width: 'auto', objectFit: 'contain', filter: 'brightness(1.15)' }} />
           <div style={{ borderLeft: '1px solid #134d2a', paddingLeft: 14 }}>
-            <div style={{ fontSize: 15, fontWeight: 800, color: '#ecfdf5', letterSpacing: 0.5 }}>AMA Archives</div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: '#064e3b', letterSpacing: 0.5 }}>AMA Archives</div>
             <div style={{ fontSize: 12, color: '#34d399', letterSpacing: 0.5 }}>{records.length} Records</div>
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-          {view !== 'dashboard' && <button onClick={() => setView('dashboard')} style={btnS('#0d2218','#34d399','#059669')}>📊 数据看板</button>}
-          {view !== 'analysis' && <button onClick={handleAnalysis} style={btnS('#0d2218','#6ee7b7','#065f46')}>🤖 深度分析</button>}
+          {view !== 'dashboard' && <button onClick={() => setView('dashboard')} style={btnS('#f0fdf4','#34d399','#059669')}>📊 数据看板</button>}
+          {view !== 'analysis' && <button onClick={handleAnalysis} style={btnS('#f0fdf4','#6ee7b7','#065f46')}>🤖 深度分析</button>}
           {view !== 'form' && <button onClick={() => { resetForm(); setView('form'); }} style={btnS('linear-gradient(135deg,#059669,#065f46)','#fff','none',true)}>+ 新建 AMA</button>}
-          {view !== 'list' && <button onClick={() => setView('list')} style={btnS('transparent','#94a3b8','#1a3a2a')}>返回列表</button>}
+          {view !== 'list' && <button onClick={() => setView('list')} style={btnS('transparent','#6b7280','#e5e7eb')}>返回列表</button>}
         </div>
       </div>
 
@@ -159,22 +159,22 @@ export default function App() {
           return (
             <div>
               <div style={{ display: 'flex', gap: 24, marginBottom: 24, flexWrap: 'wrap' }}>
-                {r.poster_url && <img src={r.poster_url} alt="海报" style={{ width: 120, height: 120, borderRadius: 10, objectFit: 'cover', border: '1px solid #0f2d1e' }} />}
+                {r.poster_url && <img src={r.poster_url} alt="海报" style={{ width: 120, height: 120, borderRadius: 10, objectFit: 'cover', border: '1px solid #bbf7d0' }} />}
                 <div style={{ flex: 1, minWidth: 200 }}>
                   <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                    <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: '#f1f5f9' }}>{r.project_name}</h1>
+                    <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: '#111827' }}>{r.project_name}</h1>
                     {r.episode && <Tag>{r.episode} 期</Tag>}
                     <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 5, background: sc.bg, color: sc.text, border: `1px solid ${sc.border}` }}>{r.status}</span>
-                    {r.platform && <Tag color="#0d2d1a">{r.platform}</Tag>}
+                    {r.platform && <Tag color="#dcfce7">{r.platform}</Tag>}
                   </div>
-                  <div style={{ fontSize: 13, color: '#94a3b8', marginBottom: 4 }}>
+                  <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 4 }}>
                     📅 {r.date}{r.time ? ` ${r.time}` : ''}{r.owner ? `　👤 ${r.owner}` : ''}
                   </div>
-                  {r.theme && <div style={{ fontSize: 15, color: '#cbd5e1', fontWeight: 500 }}>{r.theme}</div>}
+                  {r.theme && <div style={{ fontSize: 15, color: '#374151', fontWeight: 500 }}>{r.theme}</div>}
                   {r.replay_url && <a href={r.replay_url} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: '#34d399', display: 'block', marginTop: 6 }}>▶ 查看回放</a>}
                   <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
-                    <button onClick={() => openEdit(r)} style={btnS('#0d2218','#34d399','#059669')}>编辑</button>
-                    <button onClick={() => handleDelete(r.id)} style={btnS('transparent','#ef4444','#7f1d1d')}>删除</button>
+                    <button onClick={() => openEdit(r)} style={btnS('#f0fdf4','#34d399','#059669')}>编辑</button>
+                    <button onClick={() => handleDelete(r.id)} style={btnS('#fff5f5','#ef4444','#fecaca')}>删除</button>
                   </div>
                 </div>
               </div>
@@ -185,9 +185,9 @@ export default function App() {
                   { label: '📢 宣发渠道', value: r.channels },
                   { label: '📝 备注 / 复盘', value: r.notes, full: true },
                 ].filter(x => x.value).map(({ label, value, full }) => (
-                  <div key={label} style={{ gridColumn: full ? '1/-1' : 'auto', background: '#071410', border: '1px solid #0f2d1e', borderRadius: 10, padding: '16px 18px' }}>
-                    <div style={{ fontSize: 11, color: '#4a7c59', marginBottom: 8, fontWeight: 700, letterSpacing: 1 }}>{label}</div>
-                    <pre style={{ margin: 0, fontSize: 14, color: '#cbd5e1', whiteSpace: 'pre-wrap', fontFamily: 'inherit', lineHeight: 1.8 }}>{value}</pre>
+                  <div key={label} style={{ gridColumn: full ? '1/-1' : 'auto', background: '#ffffff', border: '1px solid #bbf7d0', borderRadius: 10, padding: '16px 18px' }}>
+                    <div style={{ fontSize: 11, color: '#059669', marginBottom: 8, fontWeight: 700, letterSpacing: 1 }}>{label}</div>
+                    <pre style={{ margin: 0, fontSize: 14, color: '#374151', whiteSpace: 'pre-wrap', fontFamily: 'inherit', lineHeight: 1.8 }}>{value}</pre>
                   </div>
                 ))}
               </div>
@@ -197,7 +197,7 @@ export default function App() {
 
         {view === 'form' && (
           <div>
-            <h2 style={{ margin: '0 0 24px', fontSize: 20, fontWeight: 700, color: '#f1f5f9' }}>{editId ? '编辑 AMA 记录' : '新建 AMA 记录'}</h2>
+            <h2 style={{ margin: '0 0 24px', fontSize: 20, fontWeight: 700, color: '#111827' }}>{editId ? '编辑 AMA 记录' : '新建 AMA 记录'}</h2>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
               <F label="项目名称 *"><input value={form.project_name} onChange={e => setForm(f => ({ ...f, project_name: e.target.value }))} placeholder="如：OracleX" style={inputS} /></F>
               <F label="期数"><input value={form.episode} onChange={e => setForm(f => ({ ...f, episode: e.target.value }))} placeholder="如：001" style={inputS} /></F>
@@ -233,7 +233,7 @@ export default function App() {
               </F>
               <F label="海报图片" full>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <button onClick={() => fileRef.current.click()} disabled={uploading} style={btnS('#0d2218','#34d399','#059669',false,true)}>
+                  <button onClick={() => fileRef.current.click()} disabled={uploading} style={btnS('#f0fdf4','#34d399','#059669',false,true)}>
                     {uploading ? '上传中...' : '📎 上传海报'}
                   </button>
                   <input ref={fileRef} type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
@@ -249,10 +249,10 @@ export default function App() {
                 <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="效果数据、复盘总结..." rows={3} style={{ ...inputS, resize: 'vertical' }} />
               </F>
               {(form.project_name && form.theme) && (
-                <F label={<span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>宣传文案 <button onClick={handleGenPromo} disabled={aiLoading === 'promo'} style={{ ...btnS('#0d2218','#6ee7b7','#065f46'), fontSize: 11, padding: '2px 10px' }}>{aiLoading === 'promo' ? '生成中...' : '🤖 AI 生成'}</button></span>} full>
+                <F label={<span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>宣传文案 <button onClick={handleGenPromo} disabled={aiLoading === 'promo'} style={{ ...btnS('#f0fdf4','#6ee7b7','#065f46'), fontSize: 11, padding: '2px 10px' }}>{aiLoading === 'promo' ? '生成中...' : '🤖 AI 生成'}</button></span>} full>
                   {form._promo
-                    ? <pre style={{ margin: 0, padding: '12px 16px', background: '#0f1c2e', border: '1px solid #065f46', borderRadius: 8, fontSize: 13, color: '#c4b5fd', whiteSpace: 'pre-wrap', fontFamily: 'inherit', lineHeight: 1.8 }}>{form._promo}</pre>
-                    : <div style={{ padding: '12px 16px', background: '#0f1c2e', border: '1px dashed #1a3a2a', borderRadius: 8, fontSize: 13, color: '#4a7c59' }}>填写项目名和主题后点击生成</div>}
+                    ? <pre style={{ margin: 0, padding: '12px 16px', background: '#f0fdf4', border: '1px solid #065f46', borderRadius: 8, fontSize: 13, color: '#374151', whiteSpace: 'pre-wrap', fontFamily: 'inherit', lineHeight: 1.8 }}>{form._promo}</pre>
+                    : <div style={{ padding: '12px 16px', background: '#f0fdf4', border: '1px dashed #1a3a2a', borderRadius: 8, fontSize: 13, color: '#059669' }}>填写项目名和主题后点击生成</div>}
                 </F>
               )}
             </div>
@@ -260,14 +260,14 @@ export default function App() {
               <button onClick={handleSave} disabled={saving} style={btnS('linear-gradient(135deg,#059669,#065f46)','#fff','none',true)}>
                 {saving ? '保存中...' : (editId ? '保存修改' : '创建记录')}
               </button>
-              <button onClick={() => { setView('list'); resetForm(); }} style={btnS('transparent','#94a3b8','#1a3a2a')}>取消</button>
+              <button onClick={() => { setView('list'); resetForm(); }} style={btnS('transparent','#6b7280','#e5e7eb')}>取消</button>
             </div>
           </div>
         )}
 
         {view === 'dashboard' && (
           <div>
-            <h2 style={{ margin: '0 0 20px', fontSize: 20, fontWeight: 700, color: '#f1f5f9' }}>📊 数据看板</h2>
+            <h2 style={{ margin: '0 0 20px', fontSize: 20, fontWeight: 700, color: '#111827' }}>📊 数据看板</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 24 }}>
               {[
                 { label: '总 AMA 数', value: records.length, color: '#10b981', bar: '#059669' },
@@ -275,22 +275,22 @@ export default function App() {
                 { label: '计划中', value: planned.length, color: '#fbbf24', bar: '#d97706' },
                 { label: '完成率', value: records.length ? Math.round(completed.length / records.length * 100) + '%' : '0%', color: '#6ee7b7', bar: '#059669' },
               ].map(({ label, value, color, bar }) => (
-                <div key={label} style={{ background: 'linear-gradient(180deg,#0a1f14 0%,#071a10 100%)', border: '1px solid #134d2a', borderTop: `3px solid ${bar}`, borderRadius: 12, padding: '20px 16px', textAlign: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>
+                <div key={label} style={{ background: 'linear-gradient(180deg,#f9fffe 0%,#ffffff 100%)', border: '1px solid #bbf7d0', borderTop: `3px solid ${bar}`, borderRadius: 12, padding: '20px 16px', textAlign: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>
                   <div style={{ fontSize: 36, fontWeight: 900, color, letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums' }}>{value}</div>
-                  <div style={{ fontSize: 13, color: '#4a7c59', marginTop: 6, fontWeight: 500 }}>{label}</div>
+                  <div style={{ fontSize: 13, color: '#059669', marginTop: 6, fontWeight: 500 }}>{label}</div>
                 </div>
               ))}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              <div style={{ background: 'linear-gradient(180deg,#0a1f14 0%,#071a10 100%)', border: '1px solid #134d2a', borderRadius: 12, padding: 20, boxShadow: '0 2px 12px rgba(0,0,0,0.25)' }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: '#86a894', marginBottom: 16 }}>📈 每月 AMA 数量</div>
-                {monthlyData.length === 0 ? <div style={{ color: '#1a3a2a', fontSize: 13, textAlign: 'center', padding: 20 }}>暂无数据</div> : (
+              <div style={{ background: 'linear-gradient(180deg,#f9fffe 0%,#ffffff 100%)', border: '1px solid #134d2a', borderRadius: 12, padding: 20, boxShadow: '0 2px 12px rgba(0,0,0,0.25)' }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#6b7280', marginBottom: 16 }}>📈 每月 AMA 数量</div>
+                {monthlyData.length === 0 ? <div style={{ color: '#e5e7eb', fontSize: 13, textAlign: 'center', padding: 20 }}>暂无数据</div> : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {monthlyData.map(({ month, count, max }) => (
                       <div key={month} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{ fontSize: 13, color: '#64748b', width: 55, flexShrink: 0 }}>{month}</div>
-                        <div style={{ flex: 1, background: '#0f2d1e', borderRadius: 4, height: 20, overflow: 'hidden' }}>
+                        <div style={{ fontSize: 13, color: '#6b7280', width: 55, flexShrink: 0 }}>{month}</div>
+                        <div style={{ flex: 1, background: '#dcfce7', borderRadius: 4, height: 20, overflow: 'hidden' }}>
                           <div style={{ width: `${(count / max) * 100}%`, height: '100%', background: 'linear-gradient(90deg,#059669,#065f46)', borderRadius: 4 }} />
                         </div>
                         <div style={{ fontSize: 13, color: '#34d399', width: 22, textAlign: 'right' }}>{count}</div>
@@ -300,29 +300,29 @@ export default function App() {
                 )}
               </div>
 
-              <div style={{ background: '#071410', border: '1px solid #0f2d1e', borderRadius: 10, padding: 20 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: '#86a894', marginBottom: 16 }}>🎤 KOL 出现频次 Top 10</div>
-                {kolFreq.length === 0 ? <div style={{ color: '#1a3a2a', fontSize: 13, textAlign: 'center', padding: 20 }}>暂无数据</div> : (
+              <div style={{ background: '#ffffff', border: '1px solid #bbf7d0', borderRadius: 10, padding: 20 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#6b7280', marginBottom: 16 }}>🎤 KOL 出现频次 Top 10</div>
+                {kolFreq.length === 0 ? <div style={{ color: '#e5e7eb', fontSize: 13, textAlign: 'center', padding: 20 }}>暂无数据</div> : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {kolFreq.slice(0, 10).map(({ kol, count }, i) => (
                       <div key={kol} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{ fontSize: 11, color: i < 3 ? '#fbbf24' : '#4a7c59', width: 18, textAlign: 'center' }}>{i + 1}</div>
-                        <div style={{ fontSize: 13, color: '#cbd5e1', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{kol}</div>
-                        <div style={{ fontSize: 12, color: '#34d399', background: '#0d2218', padding: '2px 8px', borderRadius: 4 }}>{count}次</div>
+                        <div style={{ fontSize: 11, color: i < 3 ? '#fbbf24' : '#059669', width: 18, textAlign: 'center' }}>{i + 1}</div>
+                        <div style={{ fontSize: 13, color: '#374151', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{kol}</div>
+                        <div style={{ fontSize: 12, color: '#34d399', background: '#f0fdf4', padding: '2px 8px', borderRadius: 4 }}>{count}次</div>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
 
-              <div style={{ background: '#071410', border: '1px solid #0f2d1e', borderRadius: 10, padding: 20 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: '#86a894', marginBottom: 16 }}>📡 平台分布</div>
-                {platformDist.length === 0 ? <div style={{ color: '#1a3a2a', fontSize: 13, textAlign: 'center', padding: 20 }}>暂无数据</div> : (
+              <div style={{ background: '#ffffff', border: '1px solid #bbf7d0', borderRadius: 10, padding: 20 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#6b7280', marginBottom: 16 }}>📡 平台分布</div>
+                {platformDist.length === 0 ? <div style={{ color: '#e5e7eb', fontSize: 13, textAlign: 'center', padding: 20 }}>暂无数据</div> : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {platformDist.map(({ platform, count, pct }) => (
                       <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{ fontSize: 12, color: '#64748b', width: 90, flexShrink: 0 }}>{platform}</div>
-                        <div style={{ flex: 1, background: '#0f2d1e', borderRadius: 4, height: 16, overflow: 'hidden' }}>
+                        <div style={{ fontSize: 12, color: '#6b7280', width: 90, flexShrink: 0 }}>{platform}</div>
+                        <div style={{ flex: 1, background: '#dcfce7', borderRadius: 4, height: 16, overflow: 'hidden' }}>
                           <div style={{ width: `${pct}%`, height: '100%', background: 'linear-gradient(90deg,#0891b2,#059669)', borderRadius: 4 }} />
                         </div>
                         <div style={{ fontSize: 12, color: '#34d399', width: 30, textAlign: 'right' }}>{count}</div>
@@ -332,8 +332,8 @@ export default function App() {
                 )}
               </div>
 
-              <div style={{ background: '#071410', border: '1px solid #0f2d1e', borderRadius: 10, padding: 20 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: '#86a894', marginBottom: 16 }}>🤖 AI 智能总结</div>
+              <div style={{ background: '#ffffff', border: '1px solid #bbf7d0', borderRadius: 10, padding: 20 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#6b7280', marginBottom: 16 }}>🤖 AI 智能总结</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <select value={summaryPeriod} onChange={e => setSummaryPeriod(e.target.value)} style={{ ...inputS, marginBottom: 4 }}>
                     <option value="monthly">月度总结</option>
@@ -343,7 +343,7 @@ export default function App() {
                   <button onClick={handleSummary} disabled={aiLoading === 'summary'} style={btnS('linear-gradient(135deg,#065f46,#059669)','#fff','none',true)}>
                     {aiLoading === 'summary' ? '生成中...' : '🤖 生成 AI 总结'}
                   </button>
-                  <button onClick={handleAnalysis} disabled={aiLoading === 'analysis'} style={btnS('#0d2218','#6ee7b7','#065f46')}>
+                  <button onClick={handleAnalysis} disabled={aiLoading === 'analysis'} style={btnS('#f0fdf4','#6ee7b7','#065f46')}>
                     {aiLoading === 'analysis' ? '分析中...' : '📋 深度运营分析'}
                   </button>
                 </div>
@@ -354,11 +354,11 @@ export default function App() {
 
         {view === 'analysis' && (
           <div>
-            <h2 style={{ margin: '0 0 20px', fontSize: 20, fontWeight: 700, color: '#f1f5f9' }}>🤖 AI 分析报告</h2>
-            <div style={{ background: '#071410', border: '1px solid #0f2d1e', borderRadius: 12, padding: '24px 28px' }}>
+            <h2 style={{ margin: '0 0 20px', fontSize: 20, fontWeight: 700, color: '#111827' }}>🤖 AI 分析报告</h2>
+            <div style={{ background: '#ffffff', border: '1px solid #bbf7d0', borderRadius: 12, padding: '24px 28px' }}>
               {(aiLoading === 'analysis' || aiLoading === 'summary')
                 ? <div style={{ color: '#34d399', textAlign: 'center', padding: 40 }}>AI 分析中，请稍候...</div>
-                : <pre style={{ margin: 0, fontSize: 14, color: '#cbd5e1', whiteSpace: 'pre-wrap', fontFamily: 'inherit', lineHeight: 1.9 }}>{analysisText || '点击「深度分析」或「AI 总结」按钮开始'}</pre>}
+                : <pre style={{ margin: 0, fontSize: 14, color: '#374151', whiteSpace: 'pre-wrap', fontFamily: 'inherit', lineHeight: 1.9 }}>{analysisText || '点击「深度分析」或「AI 总结」按钮开始'}</pre>}
             </div>
           </div>
         )}
@@ -393,30 +393,30 @@ function RecordCard({ r, onOpen, onEdit, onDelete }) {
   const [hover, setHover] = useState(false);
   return (
     <div onClick={onOpen} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-      style={{ background: hover ? '#0a1f14' : '#071a10', border: `1px solid ${hover ? '#10b981' : '#134d2a'}`,
+      style={{ background: hover ? '#f6fef9' : '#ffffff', border: `1px solid ${hover ? '#10b981' : '#86efac'}`,
         borderLeft: `4px solid ${hover ? '#10b981' : '#059669'}`,
         borderRadius: 10, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16, cursor: 'pointer', marginBottom: 10,
-        transition: 'all 0.2s ease', boxShadow: hover ? '0 4px 20px rgba(16,185,129,0.15)' : '0 1px 4px rgba(0,0,0,0.3)' }}>
-      <div style={{ width: 56, height: 56, borderRadius: 10, background: '#0f2d1e', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #134d2a' }}>
+        transition: 'all 0.2s ease', boxShadow: hover ? '0 4px 20px rgba(16,185,129,0.18)' : '0 1px 6px rgba(0,0,0,0.07)' }}>
+      <div style={{ width: 56, height: 56, borderRadius: 10, background: '#dcfce7', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #134d2a' }}>
         {r.poster_url ? <img src={r.poster_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: 24 }}>🎙️</span>}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 16, fontWeight: 700, color: '#f1f5f9' }}>{r.project_name}</span>
+          <span style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>{r.project_name}</span>
           {r.episode && <Tag>{r.episode} 期</Tag>}
           <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, background: sc.bg, color: sc.text, border: `1px solid ${sc.border}` }}>{r.status}</span>
-          {r.platform && <Tag color="#0d2d1a">{r.platform}</Tag>}
+          {r.platform && <Tag color="#dcfce7">{r.platform}</Tag>}
         </div>
-        <div style={{ fontSize: 14, color: '#94a3b8', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.theme || '（暂无主题）'}</div>
-        <div style={{ fontSize: 13, color: '#4a7c59', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ fontSize: 14, color: '#6b7280', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.theme || '（暂无主题）'}</div>
+        <div style={{ fontSize: 13, color: '#059669', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
           <span>📅 {r.date}{r.time ? ` ${r.time}` : ''}</span>
           {r.owner && <span>👤 {r.owner}</span>}
           {r.kols && <span>🎤 {r.kols.split('\n')[0]}</span>}
         </div>
       </div>
       <div style={{ display: 'flex', gap: 8, flexShrink: 0 }} onClick={e => e.stopPropagation()}>
-        <button onClick={onEdit} style={btnS('#0f2d1e','#94a3b8','#2d3f5c')}>编辑</button>
-        <button onClick={onDelete} style={btnS('transparent','#ef4444','#3f1515')}>删除</button>
+        <button onClick={onEdit} style={btnS('#dcfce7','#6b7280','#2d3f5c')}>编辑</button>
+        <button onClick={onDelete} style={btnS('#fff5f5','#ef4444','#fecaca')}>删除</button>
       </div>
     </div>
   );
@@ -425,34 +425,34 @@ function RecordCard({ r, onOpen, onEdit, onDelete }) {
 function F({ label, children, full }) {
   return (
     <div style={{ gridColumn: full ? '1/-1' : 'auto' }}>
-      <label style={{ display: 'block', fontSize: 13, color: '#64748b', marginBottom: 6, fontWeight: 600, letterSpacing: 0.5 }}>{label}</label>
+      <label style={{ display: 'block', fontSize: 13, color: '#6b7280', marginBottom: 6, fontWeight: 600, letterSpacing: 0.5 }}>{label}</label>
       {children}
     </div>
   );
 }
 
-function Tag({ children, color = '#0d2218' }) {
-  return <span style={{ fontSize: 11, color: color === '#0d2218' ? '#34d399' : '#c4b5fd', background: color, padding: '2px 7px', borderRadius: 4 }}>{children}</span>;
+function Tag({ children, color = '#f0fdf4' }) {
+  return <span style={{ fontSize: 11, color: color === '#f0fdf4' ? '#34d399' : '#c4b5fd', background: color, padding: '2px 7px', borderRadius: 4 }}>{children}</span>;
 }
 
 function Center({ children }) {
-  return <div style={{ textAlign: 'center', padding: 60, color: '#4a7c59' }}>{children}</div>;
+  return <div style={{ textAlign: 'center', padding: 60, color: '#059669' }}>{children}</div>;
 }
 
 function Empty({ search }) {
   return (
-    <div style={{ textAlign: 'center', padding: '60px 40px', border: '1px dashed #134d2a', borderRadius: 16, background: 'linear-gradient(135deg,#071a10 0%,#050f0a 100%)' }}>
+    <div style={{ textAlign: 'center', padding: '60px 40px', border: '1px dashed #86efac', borderRadius: 16, background: 'linear-gradient(135deg,#f0fdf4 0%,#ffffff 100%)' }}>
       <div style={{ fontSize: 48, marginBottom: 16, filter: 'drop-shadow(0 0 12px rgba(16,185,129,0.4))' }}>🎙️</div>
-      <div style={{ fontSize: 18, fontWeight: 700, color: '#34d399', marginBottom: 8 }}>{search ? '没有找到匹配记录' : '还没有 AMA 记录'}</div>
-      <div style={{ fontSize: 14, color: '#4a7c59' }}>{search ? '换个关键词试试' : '点击右上角「+ 新建 AMA」开始添加'}</div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: '#059669', marginBottom: 8 }}>{search ? '没有找到匹配记录' : '还没有 AMA 记录'}</div>
+      <div style={{ fontSize: 14, color: '#059669' }}>{search ? '换个关键词试试' : '点击右上角「+ 新建 AMA」开始添加'}</div>
     </div>
   );
 }
 
 const inputS = {
   width: '100%', padding: '10px 14px', borderRadius: 8,
-  background: '#071a10', border: '1px solid #134d2a',
-  color: '#d1fae5', fontSize: 15, outline: 'none',
+  background: '#ffffff', border: '1px solid #134d2a',
+  color: '#1a1a1a', fontSize: 15, outline: 'none',
   boxSizing: 'border-box', fontFamily: 'inherit',
   transition: 'border-color 0.2s',
 };
