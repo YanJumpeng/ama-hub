@@ -192,6 +192,30 @@ export default function App() {
                     <pre style={{ margin: 0, fontSize: 14, color: '#374151', whiteSpace: 'pre-wrap', fontFamily: 'inherit', lineHeight: 1.8 }}>{value}</pre>
                   </div>
                 ))}
+                {r.status === '已完成' && (r.peak_viewers || r.interactions || r.new_followers || r.rating > 0) && (
+                  <div style={{ gridColumn: '1/-1', background: 'linear-gradient(135deg,#f0fdf4,#dcfce7)', border: '2px solid #86efac', borderRadius: 12, padding: '18px 20px', marginTop: 4 }}>
+                    <div style={{ fontSize: 12, color: '#059669', fontWeight: 700, letterSpacing: 1, marginBottom: 14 }}>📊 效果数据</div>
+                    <div style={{ display: 'flex', gap: 28, flexWrap: 'wrap', marginBottom: r.effect_notes ? 14 : 0 }}>
+                      {r.peak_viewers && <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: 30, fontWeight: 900, color: '#059669', lineHeight: 1 }}>{r.peak_viewers}</div>
+                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 4 }}>峰值在线</div>
+                      </div>}
+                      {r.interactions && <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: 30, fontWeight: 900, color: '#10b981', lineHeight: 1 }}>{r.interactions}</div>
+                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 4 }}>互动数</div>
+                      </div>}
+                      {r.new_followers && <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: 30, fontWeight: 900, color: '#34d399', lineHeight: 1 }}>+{r.new_followers}</div>
+                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 4 }}>新增关注</div>
+                      </div>}
+                      {r.rating > 0 && <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: 30, fontWeight: 900, color: '#d97706', lineHeight: 1 }}>{r.rating}<span style={{ fontSize: 16 }}>/5</span></div>
+                        <div style={{ fontSize: 12, color: '#6b7280', marginTop: 4 }}>综合评分</div>
+                      </div>}
+                    </div>
+                    {r.effect_notes && <div style={{ fontSize: 13, color: '#374151', lineHeight: 1.7, borderTop: '1px solid #bbf7d0', paddingTop: 12 }}>{r.effect_notes}</div>}
+                  </div>
+                )}
               </div>
             </div>
           );
@@ -372,6 +396,27 @@ export default function App() {
                 )}
               </div>
 
+              <div style={{ background: 'linear-gradient(135deg,#f0fdf4,#ffffff)', border: '1px solid #86efac', borderRadius: 12, padding: 20 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#059669', marginBottom: 16 }}>📈 效果数据均值</div>
+                {(() => {
+                  const done = records.filter(r => r.status === '已完成' && (r.peak_viewers || r.rating));
+                  const avg = key => { const v=done.filter(r=>+r[key]>0); return v.length?Math.round(v.reduce((a,r)=>a+(+r[key]),0)/v.length):null; };
+                  if (!done.length) return <div style={{ color:'#6b7280',fontSize:13,textAlign:'center',padding:16 }}>完成AMA后填写效果数据即可显示</div>;
+                  return <div style={{ display:'flex',flexDirection:'column',gap:10 }}>
+                    {[
+                      {label:'平均峰值在线',value:avg('peak_viewers'),unit:'人',color:'#059669'},
+                      {label:'平均互动数',value:avg('interactions'),unit:'次',color:'#10b981'},
+                      {label:'平均评分',value:avg('rating'),unit:'/5',color:'#d97706'},
+                    ].filter(x=>x.value).map(({label,value,unit,color})=>(
+                      <div key={label} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'6px 0',borderBottom:'1px solid #dcfce7'}}>
+                        <span style={{fontSize:13,color:'#6b7280'}}>{label}</span>
+                        <span style={{fontSize:18,fontWeight:800,color}}>{value}{unit}</span>
+                      </div>
+                    ))}
+                    <div style={{fontSize:12,color:'#86a894',marginTop:4}}>基于 {done.length} 条已追踪记录</div>
+                  </div>;
+                })()}
+              </div>
               <div style={{ background: '#ffffff', border: '1px solid #bbf7d0', borderRadius: 10, padding: 20 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: '#6b7280', marginBottom: 16 }}>🤖 AI 智能总结</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
